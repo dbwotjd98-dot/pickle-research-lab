@@ -38,18 +38,23 @@ const COAT_D = '#e6dfd0';
 const COAT_DD = '#d0c6b3';
 
 function hairMarkup(style, hair, hairD, hairL) {
-  const base = `<path d="M84 94c-4-32 12-52 36-52s40 20 36 52c-4-13-9-22-16-26-10 8-35 10-49 2-3 7-5 14-7 24z" fill="${hair}"/>`;
+  const base = `<path d="M84 96c-2-32 15-54 36-54s38 22 36 54c-3-12-6-20-10-25-10 5-24 6-34 4-10-2-16-6-19-12-4 6-7 18-9 33z" fill="${hair}"/>`;
   if (style === 0) {
     return `${base}
-      <path d="M89 80c9-19 20-28 33-28 9 0 17 3 24 10-11-3-22-2-32 3-9 4-18 8-25 15z" fill="${hairL}" opacity=".5"/>
-      <path d="M104 46c-8 3-14 9-17 17 7-5 15-8 23-9z" fill="${hairD}" opacity=".55"/>`;
+      <path d="M96 68c5-13 14-21 26-21 8 0 15 3 20 8-9-1-17 1-23 5-5 3-9 7-12 12-3-2-7-3-11-4z" fill="${hairL}" opacity=".38"/>
+      <path d="M105 50c-4 5-6 10-7 16 5-4 10-6 16-7z" fill="${hairD}" opacity=".38"/>
+      <path d="M118 43c-2-4-1-8 2-10 1 4 2 7 1 10z" fill="${hair}"/>
+      <path d="M84 82c-3 7-4 14-3 22 4 0 6-3 6-7 0-6-1-11-3-15z" fill="${hair}"/>
+      <path d="M156 82c3 7 4 14 3 22-4 0-6-3-6-7 0-6 1-11 3-15z" fill="${hair}"/>`;
   }
   return `${base}
-    <circle cx="94" cy="65" r="11" fill="${hair}"/>
-    <circle cx="110" cy="51" r="12" fill="${hair}"/>
-    <circle cx="131" cy="50" r="12" fill="${hair}"/>
-    <circle cx="148" cy="65" r="10" fill="${hair}"/>
-    <circle cx="103" cy="57" r="7" fill="${hairL}" opacity=".28"/>`;
+    <circle cx="94" cy="67" r="11" fill="${hair}"/>
+    <circle cx="110" cy="53" r="12" fill="${hair}"/>
+    <circle cx="131" cy="52" r="12" fill="${hair}"/>
+    <circle cx="148" cy="67" r="10" fill="${hair}"/>
+    <circle cx="103" cy="59" r="7" fill="${hairL}" opacity=".28"/>
+    <path d="M84 82c-3 7-4 14-3 22 4 0 6-3 6-7 0-6-1-11-3-15z" fill="${hair}"/>
+    <path d="M156 82c3 7 4 14 3 22-4 0-6-3-6-7 0-6 1-11 3-15z" fill="${hair}"/>`;
 }
 
 function glassesMarkup() {
@@ -92,13 +97,13 @@ function headMarkup(profile, closed) {
   const hairD = shade(color, -0.34);
   const hairL = shade(color, 0.32);
   return `<g class="head-group">
-    <circle cx="84" cy="97" r="9" fill="${SKIN}"/>
-    <circle cx="84" cy="97" r="4" fill="${SKIN_D}" opacity=".5"/>
-    <circle cx="156" cy="97" r="9" fill="${SKIN}"/>
-    <circle cx="156" cy="97" r="4" fill="${SKIN_D}" opacity=".5"/>
     <path d="M120 42c21 0 36 17 36 42 0 29-16 50-36 50s-36-21-36-50c0-25 15-42 36-42z" fill="${SKIN}"/>
     <path d="M120 42c-13 0-24 6-30 17 9-4 19-6 30-6s21 2 30 6c-6-11-17-17-30-17z" fill="#000" opacity=".045"/>
     ${hairMarkup(style, hair, hairD, hairL)}
+    <circle cx="84" cy="99" r="9" fill="${SKIN}"/>
+    <circle cx="84" cy="99" r="4" fill="${SKIN_D}" opacity=".5"/>
+    <circle cx="156" cy="99" r="9" fill="${SKIN}"/>
+    <circle cx="156" cy="99" r="4" fill="${SKIN_D}" opacity=".5"/>
     <path d="M92 78q11-6 22-2" stroke="#4a3527" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <path d="M126 76q11-4 22 2" stroke="#4a3527" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <g class="eyes ${closed ? 'is-closed' : ''}">
@@ -128,7 +133,7 @@ function steamMarkup(x, y) {
 
 function stateBody(state, color) {
   const tie = shade(color, -0.22);
-  const sleeve = (d) => `<path d="${d}" fill="none" stroke="${COAT}" stroke-width="23" stroke-linecap="round"/>`;
+  const sleeve = (d) => `<path d="${d}" fill="none" stroke="${COAT_DD}" stroke-width="27" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${COAT}" stroke-width="22" stroke-linecap="round"/>`;
   const cuff = (d) => `<path d="${d}" fill="none" stroke="${COAT_DD}" stroke-width="23" stroke-linecap="butt" opacity=".5"/>`;
   const hand = (cx, cy, rot = 0) => `<ellipse class="hand" cx="${cx}" cy="${cy}" rx="7.2" ry="9.2" fill="${SKIN}" transform="rotate(${rot} ${cx} ${cy})"/>`;
   const handSmall = (cx, cy, rot = 0) => `<ellipse class="hand" cx="${cx}" cy="${cy}" rx="7.4" ry="5.6" fill="${SKIN}" transform="rotate(${rot} ${cx} ${cy})"/>`;
@@ -197,19 +202,19 @@ function stateBody(state, color) {
 
   // reading (default)
   return `
-    <g class="arms">${sleeve('M88 174C72 188 74 200 90 206')}${sleeve('M152 174C168 200 164 226 148 240')}</g>
+    <g class="arms">${sleeve('M88 174C72 192 74 202 88 208')}${sleeve('M152 174C166 204 160 228 136 240')}</g>
     <g class="paper">
-      <g transform="rotate(-4 120 216)">
-        <rect x="88" y="176" width="64" height="90" rx="2" fill="#fbf7ea" stroke="#dcd2bd" stroke-width="1.2"/>
-        <rect x="96" y="185" width="34" height="4" rx="2" fill="#8f8674"/>
-        <path d="M96 196h48M96 203h48M96 210h40M96 217h48M96 224h44" stroke="#bdb4a0" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M96 236l8-6 7 5 8-9 8 7" stroke="#7c9a86" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-        <circle cx="139" cy="194" r="6" fill="none" stroke="#b8604f" stroke-width="1.4" opacity=".7"/>
-        <path d="M135 194l3 3 5-6" stroke="#b8604f" stroke-width="1.4" fill="none" opacity=".7"/>
-        <path d="M146 250l8 9" stroke="#b8604f" stroke-width="2.4" stroke-linecap="round"/>
+      <g transform="rotate(-4 118 220)">
+        <rect x="80" y="180" width="60" height="82" rx="2" fill="#fbf7ea" stroke="#dcd2bd" stroke-width="1.2"/>
+        <rect x="87" y="189" width="32" height="4" rx="2" fill="#8f8674"/>
+        <path d="M87 200h46M87 207h46M87 214h38M87 221h46M87 228h42" stroke="#bdb4a0" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M87 239l8-6 7 5 8-9 8 7" stroke="#7c9a86" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <circle cx="128" cy="197" r="6" fill="none" stroke="#b8604f" stroke-width="1.4" opacity=".7"/>
+        <path d="M124 197l3 3 5-6" stroke="#b8604f" stroke-width="1.4" fill="none" opacity=".7"/>
+        <path d="M134 250l8 9" stroke="#b8604f" stroke-width="2.4" stroke-linecap="round"/>
       </g>
     </g>
-    <g class="hands">${hand(94, 202, -20)}${hand(146, 240, 18)}</g>`;
+    <g class="hands">${hand(88, 206, -20)}${hand(136, 242, 18)}</g>`;
 }
 
 export function characterSVG(profile = {}, opts = {}) {
@@ -229,11 +234,12 @@ export function characterSVG(profile = {}, opts = {}) {
 
   return `<svg class="${className}" viewBox="${viewBox}" role="img" aria-label="${esc(profile.name || '연구원')} 연구원 캐릭터">
     <g class="chair">
-      <rect x="56" y="176" width="128" height="132" rx="30" fill="#3a2921"/>
-      <rect x="64" y="184" width="112" height="116" rx="24" fill="#4a342a" opacity=".65"/>
-      <circle cx="96" cy="210" r="2" fill="#2b1c16" opacity=".6"/>
-      <circle cx="120" cy="205" r="2" fill="#2b1c16" opacity=".6"/>
-      <circle cx="144" cy="210" r="2" fill="#2b1c16" opacity=".6"/>
+      <rect x="64" y="184" width="112" height="124" rx="26" fill="#33231b"/>
+      <rect x="72" y="192" width="96" height="110" rx="22" fill="#453027" opacity=".55"/>
+      <path d="M74 186h92" stroke="#5a3f30" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="98" cy="216" r="2" fill="#241711" opacity=".6"/>
+      <circle cx="120" cy="211" r="2" fill="#241711" opacity=".6"/>
+      <circle cx="142" cy="216" r="2" fill="#241711" opacity=".6"/>
     </g>
     <g class="breathe">
       <path d="M120 138c-15 0-28 5-37 15-5 6-8 13-10 22l-7 87h108l-7-87c-2-9-5-16-10-22-9-10-22-15-37-15z" fill="${COAT}"/>

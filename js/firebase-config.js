@@ -11,13 +11,13 @@
  * https://<project>-default-rtdb.<region>.firebasedatabase.app 형식의 주소입니다.
  */
 export const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT.firebaseapp.com',
-  databaseURL: 'https://YOUR_PROJECT-default-rtdb.firebaseio.com',
-  projectId: 'YOUR_PROJECT',
-  storageBucket: 'YOUR_PROJECT.appspot.com',
-  messagingSenderId: 'YOUR_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+  apiKey: 'AIzaSyBkRTSUJinL9otensYXicDteCVh-jZB_-4',
+  authDomain: 'pickle-research-lab.firebaseapp.com',
+  databaseURL: 'https://pickle-research-lab-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'pickle-research-lab',
+  storageBucket: 'pickle-research-lab.firebasestorage.app',
+  messagingSenderId: '78903782119',
+  appId: '1:78903782119:web:1403c26d07052095809042',
 };
 
 /** 처음 열었을 때 사용할 방 코드 (?room=... 이 없을 때) */

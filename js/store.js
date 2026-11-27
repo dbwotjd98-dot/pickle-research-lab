@@ -119,6 +119,7 @@ function createDemoStore({ room, clientId, profile, onState, onMode, onError }) 
       board: { ...state.board },
       chat: { ...state.chat },
     };
+    if (onState) onState(snapshot);
     listeners.forEach((fn) => fn(snapshot));
   };
 

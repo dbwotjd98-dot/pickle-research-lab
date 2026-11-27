@@ -1,6 +1,6 @@
 import {
   $, $$, esc, relTime, hhmm, clockText, sanitizeRoom, roomLabel,
-  storageGet, storageSet, copyText, uid, hash,
+  storageGet, storageSet, copyText, uid, hash, shade,
 } from './util.js';
 import { createStore, isFirebaseConfigured } from './store.js';
 import {
@@ -251,7 +251,7 @@ function stationMarkup(p, isMe) {
     <div class="researcher" role="button" tabindex="0" aria-label="${esc(p.name)} 연구원">${characterSVG(p, { state: p.state })}</div>
     <div class="desk">
       <div class="desk-paper"></div>
-      <div class="desk-mug"></div>
+      <div class="desk-mug" style="background:linear-gradient(180deg, ${shade(p.color || '#6f9cf5', 0.6)}, ${shade(p.color || '#6f9cf5', 0.18)})"></div>
       <div class="nameplate" role="button" tabindex="0"><b>${esc(p.initial || '·')}</b><span>${esc(p.name)}</span>${p.demo ? '<span class="demo-mark">DEMO</span>' : ''}</div>
     </div>
     <span class="state-chip" style="--state-color:${st.color}"><i></i>${st.label}</span>
@@ -707,12 +707,9 @@ function addBoardItem(event) {
     done: false,
   };
   store.addBoard(item);
-  state.board[item.id] = item;
   $('#board-text').value = '';
   $('#board-url').value = '';
   lastBoardSig = '';
-  renderBoard();
-  renderChalkBrief();
   toast(`보드에 ${TYPE_NAME[boardType]}을 붙였어요.`);
 }
 
@@ -726,14 +723,6 @@ function submitChat(event) {
   store.sendChat(text.slice(0, 280));
   input.value = '';
   input.style.height = 'auto';
-  const id = `local-${Date.now()}`;
-  state.chat[id] = {
-    id, kind: 'chat', name: me.name, initial: me.initial, color: me.color,
-    text: text.slice(0, 280), createdAt: Date.now(), clientId,
-  };
-  lastChatSig = '';
-  renderChat();
-  showBubble(clientId, text);
   $('#chat-feed').scrollTop = $('#chat-feed').scrollHeight;
 }
 
