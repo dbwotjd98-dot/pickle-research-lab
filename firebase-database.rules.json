@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "rooms": {
+      "$room": {
+        "presence": {
+          ".read": true,
+          "$client": {
+            ".write": true,
+            ".validate": "!newData.exists() || (newData.hasChildren(['name', 'initial', 'color', 'state']) && newData.child('name').isString() && newData.child('name').val().length <= 24)"
+          }
+        },
+        "board": {
+          ".read": true,
+          "$item": {
+            ".write": true,
+            ".validate": "!newData.exists() || (newData.hasChildren(['type', 'text', 'createdAt']) && newData.child('text').isString() && newData.child('text').val().length <= 200)"
+          }
+        },
+        "chat": {
+          ".read": true,
+          "$message": {
+            ".write": true,
+            ".validate": "!newData.exists() || (newData.hasChildren(['kind', 'text', 'createdAt']) && newData.child('text').isString() && newData.child('text').val().length <= 400)"
+          }
+        }
+      }
+    }
+  }
+}

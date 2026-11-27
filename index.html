@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>픽클 연구실 · Pickle Research Lab</title>
+  <meta name="description" content="다른 피클들과 함께 쓰는 논문 연구실 테마의 합동 비서실. 실시간 접속, 공동 연구 보드, 연구실 로그." />
+  <meta name="theme-color" content="#160f0b" />
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+  <meta property="og:title" content="픽클 연구실 · Pickle Research Lab" />
+  <meta property="og:description" content="다른 피클들과 함께 쓰는 논문 연구실 테마의 합동 비서실" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="page-grain" aria-hidden="true"></div>
+
+  <header class="app-header">
+    <a class="brand" href="./" aria-label="픽클 연구실 홈">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.5 4h7M14 4v7.2L8.4 23c-1.2 2.4.5 5 3.2 5h8.8c2.7 0 4.4-2.6 3.2-5L18 11.2V4" />
+          <path d="M10.6 20h10.8" />
+          <circle cx="14" cy="23" r="1.1" fill="currentColor" stroke="none" />
+          <circle cx="18" cy="25" r=".8" fill="currentColor" stroke="none" />
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>PICKLE RESEARCH LAB</strong>
+        <small>합동 비서실 · 공동 연구실</small>
+      </span>
+    </a>
+
+    <div class="header-mid">
+      <button class="room-chip" id="room-chip" type="button" title="방 설정 · 초대 링크">
+        <span class="room-chip-key" id="room-code">LAB-1</span>
+        <span class="room-chip-name" id="room-name">제1연구실</span>
+        <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+      </button>
+      <span class="conn-badge is-connecting" id="conn-badge">
+        <i></i><span id="conn-text">연결 중</span>
+      </span>
+      <span class="headcount" id="headcount">연구원 0명</span>
+    </div>
+
+    <div class="header-actions">
+      <span class="clock" id="clock" title="지금 시각">--:--</span>
+      <button class="btn ghost invite-btn" id="btn-share" type="button" title="초대 링크 복사">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 12l4-4M7.5 9.5L6 11a3 3 0 104.2 4.2l1.5-1.5M12.5 10.5L14 9a3 3 0 10-4.2-4.2L8.3 6.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+        초대
+      </button>
+      <button class="avatar-btn" id="btn-me" type="button" title="내 연구원 정보">
+        <span class="avatar-mini" id="header-avatar">ㅂ</span>
+        <span class="avatar-name" id="header-name">입장하기</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="stage-col">
+      <section class="room-shell" aria-label="픽클 연구실">
+        <div class="room-stage" id="room-stage">
+          <div class="room-backdrop" id="room-backdrop"></div>
+          <div class="room-light" aria-hidden="true"></div>
+
+          <div class="chalk-live" aria-hidden="true">
+            <p class="chalk-kicker">PICKLE RESEARCH LAB · <span id="chalk-room">제1연구실</span></p>
+            <h1 class="chalk-title">공동 연구 노트</h1>
+            <div class="chalk-rule"></div>
+            <p class="chalk-brief-label">오늘의 브리핑</p>
+            <p class="chalk-brief" id="chalk-brief">화이트보드에 첫 연구 노트를 남겨 보세요.</p>
+            <p class="chalk-doodle">λ Σ ∫ ☕ → E = mc²</p>
+          </div>
+
+          <div class="stations" id="stations"></div>
+          <div class="room-empty" id="room-empty" hidden>
+            <p>아직 연구실이 조용하네요.</p>
+            <button type="button" class="btn primary" id="empty-join-btn">첫 연구원으로 입장하기</button>
+          </div>
+
+          <div class="room-caption">
+            <span class="live-dot" id="caption-dot"></span>
+            <span id="room-caption-text">연구실 문을 여는 중…</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel board-panel" id="board-panel">
+        <div class="panel-head board-head">
+          <div>
+            <p class="eyebrow">COMMON RESEARCH BOARD</p>
+            <h2>공동 연구 보드 <span class="head-rule"></span></h2>
+          </div>
+          <div class="board-summary" id="board-summary">노트 0 · 할 일 0</div>
+        </div>
+
+        <form class="board-composer" id="board-form" autocomplete="off">
+          <div class="type-tabs" role="tablist" aria-label="보드 항목 종류">
+            <button type="button" class="type-tab is-active" data-type="note" role="tab" aria-selected="true">📌 노트</button>
+            <button type="button" class="type-tab" data-type="todo" role="tab" aria-selected="false">✅ 할 일</button>
+            <button type="button" class="type-tab" data-type="link" role="tab" aria-selected="false">🔗 링크</button>
+            <button type="button" class="type-tab" data-type="brief" role="tab" aria-selected="false">📣 브리핑</button>
+          </div>
+          <div class="composer-fields">
+            <input class="input" id="board-text" name="text" maxlength="160" placeholder="연구실 모두에게 남길 한 줄…" />
+            <input class="input url-input" id="board-url" name="url" type="url" placeholder="https://..." hidden />
+            <button class="btn primary" type="submit">보드에 붙이기</button>
+          </div>
+          <p class="composer-hint" id="composer-hint">Enter 로 바로 붙일 수 있어요 · 최대 160자</p>
+        </form>
+
+        <div class="board-toolbar">
+          <div class="filter-tabs" id="board-filters" role="tablist">
+            <button type="button" class="filter is-active" data-filter="all">전체</button>
+            <button type="button" class="filter" data-filter="note">노트</button>
+            <button type="button" class="filter" data-filter="todo">할 일</button>
+            <button type="button" class="filter" data-filter="link">링크</button>
+            <button type="button" class="filter" data-filter="brief">브리핑</button>
+          </div>
+          <span class="board-live" id="board-live">실시간 공유 중</span>
+        </div>
+
+        <div class="notes" id="notes"></div>
+        <div class="board-empty" id="board-empty" hidden>
+          <span class="empty-pin" aria-hidden="true"></span>
+          <p>아직 보드가 비어 있어요.<br />첫 번째 연구 노트를 붙여 보세요.</p>
+        </div>
+      </section>
+    </div>
+
+    <aside class="side-col">
+      <section class="panel presence-panel">
+        <div class="panel-head slim">
+          <div>
+            <p class="eyebrow">PRESENCE</p>
+            <h2>지금 연구실</h2>
+          </div>
+          <span class="count-pill" id="presence-count">0</span>
+        </div>
+        <ul class="presence-list" id="presence-list"></ul>
+        <p class="mode-note" id="presence-note">연결 중…</p>
+      </section>
+
+      <section class="panel chat-panel">
+        <div class="panel-head slim">
+          <div>
+            <p class="eyebrow">LAB LOG</p>
+            <h2>연구실 로그</h2>
+          </div>
+          <span class="live-chip"><i></i>LIVE</span>
+        </div>
+        <div class="chat-feed" id="chat-feed"></div>
+        <form class="chat-form" id="chat-form">
+          <textarea id="chat-input" rows="1" maxlength="280" placeholder="연구실에 한마디… (Enter 전송)" aria-label="연구실 채팅 입력"></textarea>
+          <button class="send-btn" type="submit" title="보내기" aria-label="보내기">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10l14-6-5 14-2.4-5.6L3 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
+          </button>
+        </form>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <span>🧪 픽클 연구실</span>
+    <span class="dot">·</span>
+    <span>방 코드 <b id="footer-room">lab-1</b></span>
+    <span class="dot">·</span>
+    <button type="button" class="link-btn" id="footer-help">사용 안내</button>
+    <span class="spacer"></span>
+    <span class="footer-motto">좋은 비서는 좋은 연구 노트에서 나옵니다.</span>
+  </footer>
+
+  <!-- 입장 / 프로필 -->
+  <dialog class="modal join-modal" id="join-dialog">
+    <form id="join-form" class="join-form" autocomplete="off">
+      <header class="join-head">
+        <div>
+          <p class="eyebrow">RESEARCHER REGISTRATION</p>
+          <h2 id="join-title">연구실 입장 등록</h2>
+          <p class="join-sub" id="join-sub">이름표를 만들고 연구실 문을 열어 보세요. 다른 피클들과 실시간으로 만납니다.</p>
+        </div>
+        <button type="button" class="icon-btn" data-close aria-label="닫기">✕</button>
+      </header>
+
+      <div class="join-grid">
+        <div class="join-fields">
+          <div class="field-row">
+            <label class="field">
+              <span>이름</span>
+              <input class="input" name="name" id="join-name" maxlength="12" required placeholder="제이슨" />
+            </label>
+            <label class="field small">
+              <span>이니셜</span>
+              <input class="input" name="initial" id="join-initial" maxlength="2" required placeholder="ㅂ" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>연구 분야</span>
+            <input class="input" name="field" id="join-field" maxlength="20" placeholder="청약·자산" />
+          </label>
+          <div class="chips" id="field-chips">
+            <button type="button" class="chip" data-field="청약·자산">청약·자산</button>
+            <button type="button" class="chip" data-field="일정·캘린더">일정·캘린더</button>
+            <button type="button" class="chip" data-field="논문·리서치">논문·리서치</button>
+            <button type="button" class="chip" data-field="코드·자동화">코드·자동화</button>
+            <button type="button" class="chip" data-field="메일·연락">메일·연락</button>
+            <button type="button" class="chip" data-field="건강·루틴">건강·루틴</button>
+          </div>
+
+          <div class="field">
+            <span>연구원 색상</span>
+            <div class="color-picker" id="color-picker" role="radiogroup" aria-label="연구원 색상"></div>
+          </div>
+
+          <div class="field">
+            <span>지금 하는 일</span>
+            <div class="state-picker" id="state-picker" role="radiogroup" aria-label="현재 상태"></div>
+          </div>
+
+          <label class="field">
+            <span>한 줄 상태 메시지</span>
+            <input class="input" name="message" id="join-message" maxlength="40" placeholder="예: 오후 청약 공고 확인 중" />
+          </label>
+
+          <div class="field">
+            <span>연구실 소품</span>
+            <div class="toggle-row">
+              <label class="toggle"><input type="checkbox" name="glasses" checked /><span>안경</span></label>
+              <label class="toggle"><input type="checkbox" name="cap" /><span>학위모</span></label>
+              <label class="toggle"><input type="checkbox" name="tie" checked /><span>넥타이</span></label>
+              <label class="toggle"><input type="checkbox" name="mug" checked /><span>머그컵</span></label>
+            </div>
+          </div>
+        </div>
+
+        <aside class="join-preview">
+          <div class="preview-frame">
+            <div class="preview-char" id="join-preview"></div>
+            <span class="preview-stamp">LAB ID</span>
+          </div>
+          <p class="preview-name" id="preview-name">제이슨</p>
+          <p class="preview-field" id="preview-field">청약·자산 · 논문 리딩 중</p>
+          <p class="preview-note">연구복 · 연구실 가운 지급 완료</p>
+        </aside>
+      </div>
+
+      <div class="join-actions">
+        <span class="save-note">이 브라우저에 저장돼 다음에도 바로 입장할 수 있어요.</span>
+        <div class="join-buttons">
+          <button type="button" class="btn ghost" data-close>취소</button>
+          <button type="submit" class="btn primary" id="join-submit">연구실 입장 →</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 방 설정 -->
+  <dialog class="modal small-modal" id="room-dialog">
+    <header class="modal-head">
+      <div>
+        <p class="eyebrow">ROOM SETTINGS</p>
+        <h2>방 설정 · 초대</h2>
+      </div>
+      <button type="button" class="icon-btn" data-close aria-label="닫기">✕</button>
+    </header>
+    <div class="modal-body">
+      <p class="dialog-lead">같은 방 코드를 가진 피클끼리 같은 연구실에서 실시간으로 만나요. 링크만 보내면 됩니다.</p>
+      <label class="field">
+        <span>방 코드</span>
+        <div class="inline-field">
+          <input class="input" id="room-input" maxlength="32" placeholder="lab-1" />
+          <button class="btn" type="button" id="room-move">이동</button>
+        </div>
+      </label>
+      <div class="quick-rooms" id="quick-rooms">
+        <button type="button" class="chip" data-room="lab-1">제1연구실</button>
+        <button type="button" class="chip" data-room="lab-2">제2연구실</button>
+        <button type="button" class="chip" data-room="lab-3">제3연구실</button>
+      </div>
+      <label class="field">
+        <span>초대 링크</span>
+        <div class="inline-field">
+          <input class="input mono" id="room-link" readonly />
+          <button class="btn" type="button" id="room-copy">복사</button>
+        </div>
+      </label>
+      <p class="fine-print" id="room-mode-note"></p>
+    </div>
+  </dialog>
+
+  <!-- 사용 안내 -->
+  <dialog class="modal help-modal" id="help-dialog">
+    <header class="modal-head">
+      <div>
+        <p class="eyebrow">LAB MANUAL</p>
+        <h2>연구실 사용 안내</h2>
+      </div>
+      <button type="button" class="icon-btn" data-close aria-label="닫기">✕</button>
+    </header>
+    <div class="modal-body help-body">
+      <ol>
+        <li><b>입장</b> — 오른쪽 위 내 이름을 눌러 이름·이니셜·색·연구 분야·현재 상태를 정하면 연구원 캐릭터가 책상에 앉아요.</li>
+        <li><b>공동 연구 보드</b> — 노트·할 일·링크·브리핑을 붙이고 체크하거나 떼어낼 수 있어요. 브리핑은 칠판에 한 줄로 걸립니다.</li>
+        <li><b>연구실 로그</b> — 채팅과 입장·상태 변경·할 일 완료 기록이 함께 흐릅니다.</li>
+        <li><b>초대</b> — 위쪽 <b>초대</b> 버튼으로 방 링크를 복사해 다른 피클에게 보내면 같은 연구실에서 만나요.</li>
+        <li><b>상태</b> — 캐릭터를 눌러 논문 리딩·타이핑·실험·정리·휴식 사이를 바꿀 수 있어요.</li>
+      </ol>
+      <p class="fine-print">지금 모드: <b id="help-mode">데모</b>. 데모 모드는 이 브라우저 안에서만 저장되며, 칠판 앞의 <b>예시 연구원</b>은 실제 접속자가 아닙니다.</p>
+    </div>
+  </dialog>
+
+  <!-- 연구원 카드 -->
+  <dialog class="modal person-modal" id="person-dialog">
+    <div id="person-body"></div>
+  </dialog>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
