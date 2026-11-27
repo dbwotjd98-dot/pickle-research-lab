@@ -71,6 +71,29 @@ export const firebaseConfig = {
 
 ## GitHub Pages 배포
 
+### 지금 배포된 사이트
+
+- 사이트: <https://dbwotjd98-dot.github.io/pickle-research-lab/>
+- 저장소: <https://github.com/dbwotjd98-dot/pickle-research-lab>
+- Pages 소스: **`gh-pages` 브랜치 / (root)**
+- Firebase 프로젝트: `pickle-research-lab` · Realtime Database 리전 `asia-southeast1`
+
+`main` 브랜치가 원본이고, `gh-pages` 브랜치가 배포본입니다.
+(픽클의 GitHub 연결 토큰에는 Pages 설정을 바꾸는 권한이 없어, `gh-pages` 브랜치를 만들어 Pages가 자동으로 켜지게 했습니다.)
+
+### 수정한 뒤 다시 배포하기
+
+```bash
+git add -A && git commit -m "..."
+git push origin main
+# 배포본 갱신 (gh-pages 를 main 과 같은 내용으로)
+git push -f origin main:gh-pages
+```
+
+또는 저장소 **Settings > Pages > Build and deployment**에서 Source를 `Deploy from a branch` → `main` / `/ (root)`로 한 번 바꾸면, 이후에는 `git push origin main` 만으로 자동 배포됩니다.
+
+### 처음부터 새로 배포할 때
+
 ```bash
 git init
 git add .
@@ -83,6 +106,9 @@ gh repo create <owner>/pickle-research-lab --public --source=. --remote=origin -
 Source를 `Deploy from a branch`, Branch를 `main` / `/ (root)`로 저장하면
 `https://<owner>.github.io/pickle-research-lab/` 에서 열립니다.
 (`.nojekyll` 파일이 포함되어 있어 `js/` 폴더가 그대로 서빙됩니다.)
+
+> 참고: 이 저장소에는 GitHub App 권한(`workflows`) 문제로 `.github/workflows` 파일을 올리지 않았습니다.
+> Actions 기반 배포를 쓰고 싶다면 GitHub 웹에서 워크플로 파일을 직접 추가하세요.
 
 ## 방 나누기 / 초대
 
@@ -132,3 +158,10 @@ rooms/{roomId}/
 
 Chrome / Edge / Safari / Firefox 최신 버전. `BroadcastChannel`, ES Modules, CSS Container Queries를 사용합니다.
 (구형 브라우저에서는 데모 탭 간 동기화가 안 될 수 있습니다.)
+
+## 확인한 것
+
+- 데스크톱(1440×1000)과 모바일(390×844) 렌더링, JS 콘솔 에러 없음
+- Firebase 실시간 연결: 두 브라우저 세션에서 서로의 presence·상태 변경·보드 노트·채팅이 실시간 반영됨
+- 배포본에서 보드/채팅 쓰기 → DB 저장, 외부(REST)에서 쓴 presence·채팅 → 화면에 실시간 표시
+- 테스트 데이터는 모두 삭제해 `lab-1` 은 빈 연구실 상태로 두었습니다.
