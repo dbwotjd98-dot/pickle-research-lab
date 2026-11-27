@@ -246,12 +246,13 @@ function renderPresence(entries) {
 
 function stationMarkup(p, isMe) {
   const st = STATES[p.state] || STATES.reading;
+  const mugOn = !(p.accessories && p.accessories.mug === false);
   return `<div class="station${isMe ? ' is-me' : ''}" data-id="${esc(p.id)}" style="--pickle:${esc(p.color || '#6f9cf5')}">
     <div class="bubble" data-bubble></div>
     <div class="researcher" role="button" tabindex="0" aria-label="${esc(p.name)} 연구원">${characterSVG(p, { state: p.state })}</div>
     <div class="desk">
       <div class="desk-paper"></div>
-      <div class="desk-mug" style="background:linear-gradient(180deg, ${shade(p.color || '#6f9cf5', 0.6)}, ${shade(p.color || '#6f9cf5', 0.18)})"></div>
+      ${mugOn ? `<div class="desk-mug" style="background:linear-gradient(180deg, ${shade(p.color || '#6f9cf5', 0.6)}, ${shade(p.color || '#6f9cf5', 0.18)})"></div>` : ''}
       <div class="nameplate" role="button" tabindex="0"><b>${esc(p.initial || '·')}</b><span>${esc(p.name)}</span>${p.demo ? '<span class="demo-mark">DEMO</span>' : ''}</div>
     </div>
     <span class="state-chip" style="--state-color:${st.color}"><i></i>${st.label}</span>
